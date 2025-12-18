@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopifyPulse - Store Health Analyzer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-dark: #0f0f23;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text: #ffffff;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --glow: rgba(139, 92, 246, 0.5);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            color: var(--primary);
+            font-size: 1.75rem;
+        }
+        
+        .logo span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .badge-pro {
+            background: linear-gradient(135deg, var(--warning), #fbbf24);
+            color: #000;
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+            margin-left: 0.5rem;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .input-group input {
+            flex: 1;
+            min-width: 300px;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-card);
+            color: var(--text);
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--glow);
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 20px var(--glow);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--glow);
+        }
+        
+        .results-container {
+            margin-top: 3rem;
+            display: none;
+        }
+        
+        .results-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .score-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+        
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            padding: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+        
+        .score-value {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .score-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .metric-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.2);
+        }
+        
+        .metric-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .metric-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .metric-icon.seo { background: rgba(139, 92, 246, 0.2); color: var(--primary); }
+        .metric-icon.speed { background: rgba(6, 182, 212, 0.2); color: var(--secondary); }
+        .metric-icon.mobile { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .metric-icon.security { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .metric-icon.images { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .metric-icon.links { background: rgba(236, 72, 153, 0.2); color: #ec4899; }
+        
+        .metric-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .metric-score {
+            margin-left: auto;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .metric-score.good { color: var(--success); }
+        .metric-score.warning { color: var(--warning); }
+        .metric-score.bad { color: var(--danger); }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+        
+        .issues-list {
+            margin-top: 1rem;
+        }
+        
+        .issue-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        
+        .issue-item:last-child {
+            border-bottom: none;
+        }
+        
+        .issue-item i {
+            font-size: 0.8rem;
+        }
+        
+        .issue-item i.fa-check { color: var(--success); }
+        .issue-item i.fa-times { color: var(--danger); }
+        .issue-item i.fa-exclamation { color: var(--warning); }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 4rem;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            margin-top: 4rem;
+        }
+        
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .input-group input {
+                min-width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    
+    <header>
+        <div class="logo">
+            <i class="fas fa-heartbeat"></i>
+            <span>ShopifyPulse</span>
+            <span class="badge-pro">PRO</span>
+        </div>
+        <nav>
+            <a href="landing.html" style="color: var(--text-muted); text-decoration: none;">
+                <i class="fas fa-home"></i> Home
+            </a>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <section class="hero">
+            <h1>Analyze Your Store Health</h1>
+            <p>Get a comprehensive health score for your Shopify store. SEO, speed, mobile-friendliness, and more.</p>
+            
+            <div class="input-group">
+                <input type="url" id="storeUrl" placeholder="Enter your store URL (e.g., mystore.myshopify.com)" />
+                <button class="btn btn-primary" onclick="analyzeStore()">
+                    <i class="fas fa-search"></i>
+                    Analyze Now
+                </button>
+            </div>
+        </section>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Analyzing your store... This may take a moment.</p>
+        </div>
+        
+        <div class="results-container" id="results">
+            <div class="score-card">
+                <div class="score-circle">
+                    <span class="score-value" id="overallScore">87</span>
+                    <span class="score-label">Health Score</span>
+                </div>
+                <h2 style="margin-bottom: 0.5rem;">Your Store is Healthy!</h2>
+                <p style="color: var(--text-muted);">There are a few areas that could use improvement.</p>
+            </div>
+            
+            <div class="metrics-grid" id="metricsGrid">
+                <!-- Metrics will be injected here -->
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>Part of the <a href="#">ShopifyHero Tools</a> suite</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem;">Built with ❤️ for Shopify merchants</p>
+    </footer>
+    
+    <script>
+        const metricsData = [
+            {
+                id: 'seo',
+                title: 'SEO Score',
+                icon: 'fa-search',
+                iconClass: 'seo',
+                score: 92,
+                issues: [
+                    { status: 'check', text: 'Meta descriptions present on all pages' },
+                    { status: 'check', text: 'Alt tags on all images' },
+                    { status: 'warning', text: 'Some pages missing structured data' },
+                    { status: 'check', text: 'Sitemap.xml is valid' }
+                ]
+            },
+            {
+                id: 'speed',
+                title: 'Page Speed',
+                icon: 'fa-bolt',
+                iconClass: 'speed',
+                score: 78,
+                issues: [
+                    { status: 'check', text: 'First Contentful Paint: 1.2s' },
+                    { status: 'warning', text: 'Large images need optimization' },
+                    { status: 'times', text: 'Render-blocking JavaScript detected' },
+                    { status: 'check', text: 'Browser caching enabled' }
+                ]
+            },
+            {
+                id: 'mobile',
+                title: 'Mobile Friendly',
+                icon: 'fa-mobile-alt',
+                iconClass: 'mobile',
+                score: 95,
+                issues: [
+                    { status: 'check', text: 'Responsive design detected' },
+                    { status: 'check', text: 'Touch targets properly sized' },
+                    { status: 'check', text: 'Viewport meta tag present' },
+                    { status: 'check', text: 'Text readable without zoom' }
+                ]
+            },
+            {
+                id: 'security',
+                title: 'Security',
+                icon: 'fa-shield-alt',
+                iconClass: 'security',
+                score: 100,
+                issues: [
+                    { status: 'check', text: 'SSL certificate valid' },
+                    { status: 'check', text: 'HTTPS redirect enabled' },
+                    { status: 'check', text: 'No mixed content warnings' },
+                    { status: 'check', text: 'Secure payment gateway' }
+                ]
+            },
+            {
+                id: 'images',
+                title: 'Image Optimization',
+                icon: 'fa-image',
+                iconClass: 'images',
+                score: 68,
+                issues: [
+                    { status: 'times', text: '12 images over 500KB' },
+                    { status: 'warning', text: 'WebP format not used' },
+                    { status: 'check', text: 'Lazy loading enabled' },
+                    { status: 'warning', text: 'Some images missing dimensions' }
+                ]
+            },
+            {
+                id: 'links',
+                title: 'Link Health',
+                icon: 'fa-link',
+                iconClass: 'links',
+                score: 85,
+                issues: [
+                    { status: 'check', text: 'No broken internal links' },
+                    { status: 'warning', text: '3 external links returning 404' },
+                    { status: 'check', text: 'All links have descriptive text' },
+                    { status: 'check', text: 'Canonical URLs properly set' }
+                ]
+            }
+        ];
+        
+        function analyzeStore() {
+            const url = document.getElementById('storeUrl').value.trim();
+            
+            if (!url) {
+                alert('Please enter a store URL');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('results').classList.remove('active');
+            
+            // Simulate analysis
+            setTimeout(() => {
+                document.getElementById('loading').classList.remove('active');
+                renderResults();
+                document.getElementById('results').classList.add('active');
+            }, 2500);
+        }
+        
+        function renderResults() {
+            const grid = document.getElementById('metricsGrid');
+            grid.innerHTML = '';
+            
+            // Calculate overall score
+            const avgScore = Math.round(metricsData.reduce((sum, m) => sum + m.score, 0) / metricsData.length);
+            document.getElementById('overallScore').textContent = avgScore;
+            
+            metricsData.forEach(metric => {
+                const scoreClass = metric.score >= 80 ? 'good' : metric.score >= 60 ? 'warning' : 'bad';
+                const progressColor = metric.score >= 80 ? 'var(--success)' : metric.score >= 60 ? 'var(--warning)' : 'var(--danger)';
+                
+                const card = document.createElement('div');
+                card.className = 'metric-card';
+                card.innerHTML = `
+                    <div class="metric-header">
+                        <div class="metric-icon ${metric.iconClass}">
+                            <i class="fas ${metric.icon}"></i>
+                        </div>
+                        <span class="metric-title">${metric.title}</span>
+                        <span class="metric-score ${scoreClass}">${metric.score}</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${metric.score}%; background: ${progressColor};"></div>
+                    </div>
+                    <div class="issues-list">
+                        ${metric.issues.map(issue => `
+                            <div class="issue-item">
+                                <i class="fas fa-${issue.status}"></i>
+                                <span>${issue.text}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        // Allow Enter key to trigger analysis
+        document.getElementById('storeUrl').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') analyzeStore();
+        });
+    </script>
+</body>
+</html>
