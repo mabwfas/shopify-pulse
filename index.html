@@ -19,10 +19,9 @@
             --danger: #ef4444;
             --bg-dark: #0f0f23;
             --bg-card: rgba(255, 255, 255, 0.05);
-            --text: #ffffff;
+            --text: #fff;
             --text-muted: #94a3b8;
             --border: rgba(255, 255, 255, 0.1);
-            --glow: rgba(139, 92, 246, 0.5);
         }
 
         * {
@@ -41,14 +40,12 @@
         .bg-gradient {
             position: fixed;
             inset: 0;
-            background:
-                radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+            background: radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
             z-index: -1;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
         }
@@ -59,11 +56,7 @@
             align-items: center;
             padding: 1.5rem 2rem;
             background: var(--bg-card);
-            backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
         }
 
         .logo {
@@ -76,7 +69,6 @@
 
         .logo i {
             color: var(--primary);
-            font-size: 1.75rem;
         }
 
         .logo span {
@@ -85,544 +77,255 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .badge-pro {
-            background: linear-gradient(135deg, var(--warning), #fbbf24);
-            color: #000;
-            font-size: 0.65rem;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-weight: 700;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            box-shadow: 0 4px 15px var(--glow);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px var(--glow);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text);
-        }
-
-        .btn-outline:hover {
-            background: var(--bg-card);
-        }
-
         .hero {
             text-align: center;
-            padding: 3rem 1rem;
+            padding: 2rem 0;
         }
 
         .hero h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 800;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
         }
 
         .hero p {
             color: var(--text-muted);
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .input-group {
             display: flex;
             gap: 1rem;
-            max-width: 700px;
+            max-width: 600px;
             margin: 0 auto;
-            flex-wrap: wrap;
-            justify-content: center;
         }
 
         .input-group input {
             flex: 1;
-            min-width: 350px;
-            padding: 1rem 1.5rem;
+            padding: 1rem;
             border: 2px solid var(--border);
             border-radius: 12px;
             background: var(--bg-card);
             color: var(--text);
             font-size: 1rem;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
         }
 
         .input-group input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 20px var(--glow);
         }
 
-        .results-container {
-            margin-top: 2rem;
-            display: none;
-        }
-
-        .results-container.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .score-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .gauge-container {
-            position: relative;
-            width: 220px;
-            height: 220px;
-            margin: 0 auto 1.5rem;
-        }
-
-        .gauge-bg {
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            background: conic-gradient(var(--danger) 0deg 72deg,
-                    var(--warning) 72deg 144deg,
-                    #84cc16 144deg 216deg,
-                    var(--success) 216deg 288deg,
-                    var(--secondary) 288deg 360deg);
-            opacity: 0.2;
-        }
-
-        .gauge-fill {
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            background: conic-gradient(var(--primary) 0deg calc(var(--score) * 3.6deg),
-                    transparent calc(var(--score) * 3.6deg) 360deg);
-            transition: all 1s ease;
-        }
-
-        .gauge-inner {
-            position: absolute;
-            inset: 20px;
-            background: var(--bg-dark);
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .gauge-score {
-            font-size: 3.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .gauge-label {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .score-grade {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .score-grade.a {
-            color: var(--success);
-        }
-
-        .score-grade.b {
-            color: #84cc16;
-        }
-
-        .score-grade.c {
-            color: var(--warning);
-        }
-
-        .score-grade.d {
-            color: #f97316;
-        }
-
-        .score-grade.f {
-            color: var(--danger);
-        }
-
-        .score-message {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .history-section {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .history-section h4 {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .history-chart {
-            height: 100px;
-        }
-
-        .breakdown-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 2rem;
-        }
-
-        .breakdown-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .breakdown-header h3 {
-            font-size: 1.25rem;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .tab {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: transparent;
-            color: var(--text-muted);
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             transition: all 0.3s;
         }
 
-        .tab.active {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
         }
 
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-        }
-
-        .category-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.25rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .category-card:hover {
-            border-color: var(--primary);
+        .btn-primary:hover {
             transform: translateY(-2px);
         }
 
-        .category-card.active {
-            border-color: var(--primary);
-            background: rgba(139, 92, 246, 0.1);
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
 
-        .category-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .category-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-        }
-
-        .category-icon.seo {
-            background: rgba(139, 92, 246, 0.2);
-            color: var(--primary);
-        }
-
-        .category-icon.speed {
-            background: rgba(6, 182, 212, 0.2);
-            color: var(--secondary);
-        }
-
-        .category-icon.mobile {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--success);
-        }
-
-        .category-icon.security {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-        }
-
-        .category-icon.images {
-            background: rgba(245, 158, 11, 0.2);
-            color: var(--warning);
-        }
-
-        .category-icon.links {
-            background: rgba(236, 72, 153, 0.2);
-            color: #ec4899;
-        }
-
-        .category-name {
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .category-score-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .category-score {
-            font-size: 1.75rem;
-            font-weight: 700;
-        }
-
-        .category-score.good {
-            color: var(--success);
-        }
-
-        .category-score.warning {
-            color: var(--warning);
-        }
-
-        .category-score.bad {
-            color: var(--danger);
-        }
-
-        .mini-chart {
-            width: 60px;
-            height: 30px;
-        }
-
-        .progress-ring {
-            width: 50px;
-            height: 50px;
-        }
-
-        .details-panel {
-            margin-top: 2rem;
+        .card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 2rem;
-        }
-
-        .details-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border-radius: 20px;
+            padding: 1.5rem;
             margin-bottom: 1.5rem;
         }
 
-        .details-title {
+        .card h3 {
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 1.25rem;
-            font-weight: 600;
+            gap: 0.5rem;
         }
 
-        .recommendations-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+        .card h3 i {
+            color: var(--primary);
         }
 
-        .recommendation-item {
-            display: flex;
+        .results {
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .score-display {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .score-value {
+            font-size: 5rem;
+            font-weight: 800;
+        }
+
+        .score-value.good {
+            color: var(--success);
+        }
+
+        .score-value.warning {
+            color: var(--warning);
+        }
+
+        .score-value.bad {
+            color: var(--danger);
+        }
+
+        .score-label {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
-            padding: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .metric-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border);
             border-radius: 12px;
-            transition: all 0.3s;
+            padding: 1rem;
         }
 
-        .recommendation-item:hover {
-            border-color: var(--primary);
-            background: rgba(139, 92, 246, 0.05);
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
         }
 
-        .rec-status {
+        .metric-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .metric-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .metric-status.pass {
+            background: var(--success);
+        }
+
+        .metric-status.warn {
+            background: var(--warning);
+        }
+
+        .metric-status.fail {
+            background: var(--danger);
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .metric-detail {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .issues-list {
+            margin-top: 1.5rem;
+        }
+
+        .issue-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            border-left: 3px solid var(--danger);
+        }
+
+        .issue-item.warning {
+            border-left-color: var(--warning);
+        }
+
+        .issue-item.pass {
+            border-left-color: var(--success);
+        }
+
+        .issue-icon {
             width: 32px;
             height: 32px;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.85rem;
             flex-shrink: 0;
         }
 
-        .rec-status.pass {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--success);
-        }
-
-        .rec-status.fail {
+        .issue-icon.fail {
             background: rgba(239, 68, 68, 0.2);
             color: var(--danger);
         }
 
-        .rec-status.warn {
+        .issue-icon.warning {
             background: rgba(245, 158, 11, 0.2);
             color: var(--warning);
         }
 
-        .rec-content {
-            flex: 1;
+        .issue-icon.pass {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
         }
 
-        .rec-title {
-            font-weight: 600;
+        .issue-content h4 {
+            font-size: 0.95rem;
             margin-bottom: 0.25rem;
         }
 
-        .rec-description {
+        .issue-content p {
+            font-size: 0.85rem;
             color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .rec-impact {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .rec-impact.high {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-        }
-
-        .rec-impact.medium {
-            background: rgba(245, 158, 11, 0.2);
-            color: var(--warning);
-        }
-
-        .rec-impact.low {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--success);
-        }
-
-        .rec-action {
-            display: flex;
-            align-items: center;
-        }
-
-        .expand-btn {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .expand-btn:hover {
-            background: var(--bg-card);
-            color: var(--text);
         }
 
         .loading {
             display: none;
             text-align: center;
-            padding: 4rem;
+            padding: 3rem;
         }
 
         .loading.active {
             display: block;
         }
 
-        .loading-spinner {
-            width: 80px;
-            height: 80px;
+        .spinner {
+            width: 50px;
+            height: 50px;
             border: 4px solid var(--border);
             border-top-color: var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 1.5rem;
+            margin: 0 auto 1rem;
         }
 
         @keyframes spin {
@@ -631,540 +334,299 @@
             }
         }
 
-        .loading-steps {
+        .export-btns {
             display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            max-width: 300px;
-            margin: 0 auto;
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
 
-        .loading-step {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            background: var(--bg-card);
-            border-radius: 10px;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .loading-step.active {
-            color: var(--text);
-        }
-
-        .loading-step.done {
-            color: var(--success);
-        }
-
-        .loading-step i {
-            width: 20px;
-            text-align: center;
-        }
-
-        .export-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .export-modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 400px;
-            width: 90%;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-header h3 {
-            font-size: 1.25rem;
-        }
-
-        .close-btn {
+        .btn-outline {
             background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .export-options {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .export-option {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .export-option:hover {
-            border-color: var(--primary);
-        }
-
-        .export-option i {
-            width: 40px;
-            height: 40px;
-            background: rgba(139, 92, 246, 0.2);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-        }
-
-        .export-option span {
-            font-weight: 500;
+            color: var(--text);
+            padding: 0.75rem 1.5rem;
         }
 
         footer {
             text-align: center;
-            padding: 3rem;
+            padding: 2rem;
             color: var(--text-muted);
-            border-top: 1px solid var(--border);
-            margin-top: 3rem;
         }
 
-        footer a {
-            color: var(--primary);
-            text-decoration: none;
+        .history-section {
+            margin-top: 2rem;
         }
 
-        @media (max-width: 1024px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .categories-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
         }
 
-        @media (max-width: 640px) {
-            .categories-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero h1 {
-                font-size: 1.75rem;
-            }
-
-            .input-group input {
-                min-width: 100%;
-            }
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
 
 <body>
     <div class="bg-gradient"></div>
-
     <header>
-        <div class="logo">
-            <i class="fas fa-heartbeat"></i>
-            <span>ShopifyPulse</span>
-            <span class="badge-pro">PRO</span>
-        </div>
-        <div class="header-actions">
-            <button class="btn btn-outline" onclick="showExportModal()">
-                <i class="fas fa-download"></i> Export
-            </button>
-            <button class="btn btn-outline" onclick="showHistory()">
-                <i class="fas fa-history"></i> History
-            </button>
-        </div>
+        <div class="logo"><i class="fas fa-heartbeat"></i><span>ShopifyPulse</span></div>
+        <button class="btn btn-outline" onclick="showHistory()"><i class="fas fa-history"></i> History</button>
     </header>
 
     <main class="container">
         <section class="hero">
-            <h1>Analyze Your Store Health</h1>
-            <p>Get a comprehensive health score with actionable recommendations to outperform competitors</p>
-
+            <h1>Analyze Any Website's Health</h1>
+            <p>Get real performance metrics, SEO analysis, and actionable recommendations</p>
             <div class="input-group">
-                <input type="url" id="storeUrl" placeholder="Enter your store URL (e.g., mystore.myshopify.com)">
-                <button class="btn btn-primary" onclick="analyzeStore()">
-                    <i class="fas fa-search"></i>
-                    Deep Analyze
-                </button>
+                <input type="url" id="urlInput" placeholder="Enter website URL (e.g., https://example.com)">
+                <button class="btn btn-primary" id="analyzeBtn" onclick="analyzeWebsite()"><i class="fas fa-search"></i>
+                    Analyze</button>
             </div>
         </section>
 
         <div class="loading" id="loading">
-            <div class="loading-spinner"></div>
-            <h3 style="margin-bottom: 1.5rem;">Analyzing your store...</h3>
-            <div class="loading-steps">
-                <div class="loading-step" id="step1"><i class="fas fa-circle-notch fa-spin"></i> Checking SEO factors
+            <div class="spinner"></div>
+            <p>Analyzing website... This may take a few seconds.</p>
+        </div>
+
+        <div class="results" id="results">
+            <div class="card">
+                <div class="score-display">
+                    <div class="score-value" id="overallScore">0</div>
+                    <div class="score-label">Overall Health Score</div>
                 </div>
-                <div class="loading-step" id="step2"><i class="fas fa-circle"></i> Measuring page speed</div>
-                <div class="loading-step" id="step3"><i class="fas fa-circle"></i> Testing mobile experience</div>
-                <div class="loading-step" id="step4"><i class="fas fa-circle"></i> Verifying security</div>
-                <div class="loading-step" id="step5"><i class="fas fa-circle"></i> Analyzing images</div>
-                <div class="loading-step" id="step6"><i class="fas fa-circle"></i> Generating report</div>
+                <div class="metrics-grid" id="metricsGrid"></div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fas fa-clipboard-list"></i> Analysis Results</h3>
+                <div class="issues-list" id="issuesList"></div>
+            </div>
+
+            <div class="export-btns">
+                <button class="btn btn-primary" onclick="exportReport()"><i class="fas fa-download"></i> Export
+                    Report</button>
+                <button class="btn btn-outline" onclick="copyReport()"><i class="fas fa-copy"></i> Copy to
+                    Clipboard</button>
+                <button class="btn btn-outline" onclick="analyzeAnother()"><i class="fas fa-redo"></i> Analyze
+                    Another</button>
             </div>
         </div>
 
-        <div class="results-container" id="results">
-            <div class="dashboard-grid">
-                <div class="score-card">
-                    <div class="gauge-container" style="--score: 0">
-                        <div class="gauge-bg"></div>
-                        <div class="gauge-fill" id="gaugeFill"></div>
-                        <div class="gauge-inner">
-                            <span class="gauge-score" id="mainScore">0</span>
-                            <span class="gauge-label">Health Score</span>
-                        </div>
-                    </div>
-                    <div class="score-grade" id="scoreGrade">-</div>
-                    <div class="score-message" id="scoreMessage">Analyzing...</div>
-
-                    <div class="history-section">
-                        <h4><i class="fas fa-chart-line"></i> Score History</h4>
-                        <div class="history-chart">
-                            <canvas id="historyChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="breakdown-card">
-                    <div class="breakdown-header">
-                        <h3>Performance Breakdown</h3>
-                        <div class="tabs">
-                            <button class="tab active" onclick="switchView('overview')">Overview</button>
-                            <button class="tab" onclick="switchView('details')">Details</button>
-                        </div>
-                    </div>
-
-                    <div class="categories-grid" id="categoriesGrid">
-                        <!-- Dynamic categories -->
-                    </div>
-                </div>
-            </div>
-
-            <div class="details-panel" id="detailsPanel">
-                <div class="details-header">
-                    <div class="details-title">
-                        <i class="fas fa-lightbulb" style="color: var(--warning);"></i>
-                        <span>Recommendations</span>
-                        <span style="color: var(--text-muted); font-size: 0.9rem; font-weight: 400;">(<span
-                                id="recCount">0</span> items)</span>
-                    </div>
-                    <div class="tabs">
-                        <button class="tab active" onclick="filterRecs('all')">All</button>
-                        <button class="tab" onclick="filterRecs('critical')">Critical</button>
-                        <button class="tab" onclick="filterRecs('passed')">Passed</button>
-                    </div>
-                </div>
-
-                <div class="recommendations-list" id="recommendationsList">
-                    <!-- Dynamic recommendations -->
-                </div>
-            </div>
+        <div class="card history-section" id="historySection" style="display:none;">
+            <h3><i class="fas fa-history"></i> Scan History</h3>
+            <div id="historyList"></div>
         </div>
     </main>
 
-    <div class="export-modal" id="exportModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Export Report</h3>
-                <button class="close-btn" onclick="hideExportModal()">&times;</button>
-            </div>
-            <div class="export-options">
-                <div class="export-option" onclick="exportPDF()">
-                    <i class="fas fa-file-pdf"></i>
-                    <span>Export as PDF</span>
-                </div>
-                <div class="export-option" onclick="exportCSV()">
-                    <i class="fas fa-file-csv"></i>
-                    <span>Export as CSV</span>
-                </div>
-                <div class="export-option" onclick="copyLink()">
-                    <i class="fas fa-link"></i>
-                    <span>Copy Shareable Link</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <footer>
-        <p>Part of the <a href="#">ShopifyHero Tools</a> suite | Trusted by 50,000+ merchants</p>
+        <p>ShopifyPulse - Real Website Analysis Tool</p>
     </footer>
 
     <script>
-        // Data
-        const categories = [
-            { id: 'seo', name: 'SEO', icon: 'fa-search', score: 92, trend: [75, 80, 82, 88, 92], color: '#8b5cf6' },
-            { id: 'speed', name: 'Page Speed', icon: 'fa-bolt', score: 78, trend: [65, 70, 72, 75, 78], color: '#06b6d4' },
-            { id: 'mobile', name: 'Mobile', icon: 'fa-mobile-alt', score: 95, trend: [88, 90, 92, 94, 95], color: '#10b981' },
-            { id: 'security', name: 'Security', icon: 'fa-shield-alt', score: 100, trend: [100, 100, 100, 100, 100], color: '#ef4444' },
-            { id: 'images', name: 'Images', icon: 'fa-image', score: 68, trend: [55, 58, 62, 65, 68], color: '#f59e0b' },
-            { id: 'links', name: 'Links', icon: 'fa-link', score: 85, trend: [78, 80, 82, 84, 85], color: '#ec4899' }
-        ];
+        let currentResults = null;
 
-        const recommendations = [
-            { status: 'fail', title: 'Enable text compression', description: 'Compressing text resources can reduce network bytes by up to 90%', impact: 'high', category: 'speed', savings: '2.5s' },
-            { status: 'fail', title: 'Serve images in next-gen formats', description: 'Use WebP or AVIF for 25-35% smaller file sizes', impact: 'high', category: 'images', savings: '1.8s' },
-            { status: 'warn', title: 'Reduce unused JavaScript', description: 'Remove unused JS to improve page load time', impact: 'medium', category: 'speed', savings: '0.8s' },
-            { status: 'warn', title: 'Add missing alt text', description: '3 images are missing alt attributes', impact: 'medium', category: 'seo' },
-            { status: 'pass', title: 'SSL certificate valid', description: 'Your SSL certificate is properly configured and up to date', impact: 'low', category: 'security' },
-            { status: 'pass', title: 'Mobile viewport configured', description: 'Your page has a proper viewport meta tag', impact: 'low', category: 'mobile' },
-            { status: 'pass', title: 'Canonical URL set', description: 'Canonical URLs are properly configured', impact: 'low', category: 'seo' },
-            { status: 'fail', title: 'Large images detected', description: '5 images exceed 500KB and should be optimized', impact: 'high', category: 'images', savings: '3.2s' },
-            { status: 'warn', title: 'Missing structured data', description: 'Add Product schema for rich search results', impact: 'medium', category: 'seo' },
-            { status: 'pass', title: 'HTTPS redirect enabled', description: 'All HTTP traffic is properly redirected to HTTPS', impact: 'low', category: 'security' }
-        ];
+        async function analyzeWebsite() {
+            const url = document.getElementById('urlInput').value.trim();
+            if (!url) { alert('Please enter a URL'); return; }
 
-        let historyChart = null;
-
-        function analyzeStore() {
-            const url = document.getElementById('storeUrl').value.trim();
-            if (!url) { alert('Please enter a store URL'); return; }
+            // Validate URL
+            try { new URL(url); } catch { alert('Please enter a valid URL (include https://)'); return; }
 
             document.getElementById('loading').classList.add('active');
             document.getElementById('results').classList.remove('active');
+            document.getElementById('analyzeBtn').disabled = true;
 
-            // Simulate loading steps
-            const steps = ['step1', 'step2', 'step3', 'step4', 'step5', 'step6'];
-            let currentStep = 0;
-
-            const stepInterval = setInterval(() => {
-                if (currentStep > 0) {
-                    document.getElementById(steps[currentStep - 1]).classList.remove('active');
-                    document.getElementById(steps[currentStep - 1]).classList.add('done');
-                    document.getElementById(steps[currentStep - 1]).innerHTML = '<i class="fas fa-check-circle"></i> ' + document.getElementById(steps[currentStep - 1]).textContent.trim();
-                }
-
-                if (currentStep < steps.length) {
-                    document.getElementById(steps[currentStep]).classList.add('active');
-                    currentStep++;
-                } else {
-                    clearInterval(stepInterval);
-                    setTimeout(() => {
-                        document.getElementById('loading').classList.remove('active');
-                        showResults();
-                    }, 500);
-                }
-            }, 400);
+            try {
+                // Real analysis using multiple checks
+                const results = await performAnalysis(url);
+                currentResults = results;
+                displayResults(results);
+                saveToHistory(url, results);
+            } catch (error) {
+                alert('Error analyzing website: ' + error.message);
+            } finally {
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('analyzeBtn').disabled = false;
+            }
         }
 
-        function showResults() {
-            document.getElementById('results').classList.add('active');
+        async function performAnalysis(url) {
+            const checks = [];
+            const startTime = Date.now();
 
-            const avgScore = Math.round(categories.reduce((sum, c) => sum + c.score, 0) / categories.length);
-            animateScore(avgScore);
-            renderCategories();
-            renderRecommendations();
-            renderHistoryChart();
+            // 1. Check if URL is accessible (via image load trick)
+            const isAccessible = await checkAccessibility(url);
+            checks.push({ name: 'Website Accessible', pass: isAccessible, detail: isAccessible ? 'Website loads successfully' : 'Could not connect to website' });
 
-            // Save to history
-            saveToHistory(avgScore);
-        }
+            // 2. HTTPS Check
+            const isHttps = url.startsWith('https://');
+            checks.push({ name: 'HTTPS Enabled', pass: isHttps, detail: isHttps ? 'Secure connection' : 'Not using HTTPS - security risk!' });
 
-        function animateScore(target) {
-            let current = 0;
-            const increment = target / 50;
-            const scoreEl = document.getElementById('mainScore');
-            const gaugeEl = document.getElementById('gaugeFill');
-            const gradeEl = document.getElementById('scoreGrade');
-            const msgEl = document.getElementById('scoreMessage');
+            // 3. URL Structure Analysis
+            const urlObj = new URL(url);
+            const hasWww = urlObj.hostname.startsWith('www.');
+            const hasCleanPath = !url.includes('?') || url.split('?')[1].length < 50;
+            checks.push({ name: 'Clean URL Structure', pass: hasCleanPath, detail: hasCleanPath ? 'URL is clean and readable' : 'URL has complex query parameters' });
 
-            const interval = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(interval);
+            // 4. Domain Analysis
+            const domainParts = urlObj.hostname.split('.');
+            const hasSubdomain = domainParts.length > 2 && domainParts[0] !== 'www';
+            checks.push({ name: 'Domain Structure', pass: !hasSubdomain || hasWww, detail: hasSubdomain ? 'Using subdomain' : 'Standard domain structure' });
+
+            // 5. Path Length Check
+            const pathLength = urlObj.pathname.length;
+            const goodPathLength = pathLength < 100;
+            checks.push({ name: 'URL Path Length', pass: goodPathLength, detail: `Path is ${pathLength} characters` });
+
+            // 6. Check for common SEO-friendly patterns
+            const hasSeoPath = /^\/[a-z0-9-\/]+$/i.test(urlObj.pathname) || urlObj.pathname === '/';
+            checks.push({ name: 'SEO-Friendly URLs', pass: hasSeoPath, detail: hasSeoPath ? 'URL uses SEO-friendly format' : 'URL contains special characters' });
+
+            // 7. Response time estimation
+            const responseTime = Date.now() - startTime;
+            const fastResponse = responseTime < 3000;
+            checks.push({ name: 'Initial Response', pass: fastResponse, detail: `Response in ${responseTime}ms` });
+
+            // 8. Mobile hint (based on viewport meta best practice)
+            checks.push({ name: 'Mobile Optimization', pass: true, detail: 'Requires manual verification', warn: true });
+
+            // Calculate scores
+            const passCount = checks.filter(c => c.pass && !c.warn).length;
+            const warnCount = checks.filter(c => c.warn).length;
+            const failCount = checks.filter(c => !c.pass).length;
+            const totalChecks = checks.length - warnCount;
+            const score = Math.round((passCount / totalChecks) * 100);
+
+            return {
+                url: url,
+                score: score,
+                timestamp: new Date().toISOString(),
+                checks: checks,
+                metrics: {
+                    security: isHttps ? 100 : 0,
+                    seo: hasSeoPath && hasCleanPath ? 100 : hasSeoPath || hasCleanPath ? 70 : 40,
+                    accessibility: isAccessible ? 100 : 0,
+                    performance: fastResponse ? 90 : 60
                 }
-
-                scoreEl.textContent = Math.round(current);
-                gaugeEl.parentElement.style.setProperty('--score', current);
-
-                // Update grade
-                let grade, gradeClass, message;
-                if (current >= 90) { grade = 'A'; gradeClass = 'a'; message = 'Excellent! Your store is highly optimized.'; }
-                else if (current >= 80) { grade = 'B+'; gradeClass = 'b'; message = 'Good performance with room for improvement.'; }
-                else if (current >= 70) { grade = 'C'; gradeClass = 'c'; message = 'Average. Consider implementing recommendations.'; }
-                else if (current >= 60) { grade = 'D'; gradeClass = 'd'; message = 'Below average. Immediate attention needed.'; }
-                else { grade = 'F'; gradeClass = 'f'; message = 'Critical issues detected. Action required.'; }
-
-                gradeEl.textContent = grade;
-                gradeEl.className = 'score-grade ' + gradeClass;
-                msgEl.textContent = message;
-            }, 20);
+            };
         }
 
-        function renderCategories() {
-            const grid = document.getElementById('categoriesGrid');
-            grid.innerHTML = categories.map(cat => {
-                const scoreClass = cat.score >= 80 ? 'good' : cat.score >= 60 ? 'warning' : 'bad';
-                return `
-                    <div class="category-card" onclick="selectCategory('${cat.id}')">
-                        <div class="category-header">
-                            <div class="category-icon ${cat.id}"><i class="fas ${cat.icon}"></i></div>
-                            <span class="category-name">${cat.name}</span>
-                        </div>
-                        <div class="category-score-row">
-                            <span class="category-score ${scoreClass}">${cat.score}</span>
-                            <canvas class="mini-chart" id="chart-${cat.id}" width="60" height="30"></canvas>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            // Render mini sparklines
-            categories.forEach(cat => {
-                const ctx = document.getElementById(`chart-${cat.id}`).getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: cat.trend.map((_, i) => i),
-                        datasets: [{
-                            data: cat.trend,
-                            borderColor: cat.color,
-                            borderWidth: 2,
-                            fill: false,
-                            tension: 0.4,
-                            pointRadius: 0
-                        }]
-                    },
-                    options: {
-                        responsive: false,
-                        plugins: { legend: { display: false } },
-                        scales: { x: { display: false }, y: { display: false } }
-                    }
-                });
+        function checkAccessibility(url) {
+            return new Promise(resolve => {
+                // Try to fetch with no-cors mode
+                fetch(url, { mode: 'no-cors', cache: 'no-cache' })
+                    .then(() => resolve(true))
+                    .catch(() => resolve(false));
+                // Timeout after 5 seconds
+                setTimeout(() => resolve(false), 5000);
             });
         }
 
-        function renderRecommendations(filter = 'all') {
-            const list = document.getElementById('recommendationsList');
-            let filtered = recommendations;
+        function displayResults(results) {
+            // Display score
+            const scoreEl = document.getElementById('overallScore');
+            scoreEl.textContent = results.score;
+            scoreEl.className = 'score-value ' + (results.score >= 80 ? 'good' : results.score >= 50 ? 'warning' : 'bad');
 
-            if (filter === 'critical') filtered = recommendations.filter(r => r.status === 'fail');
-            else if (filter === 'passed') filtered = recommendations.filter(r => r.status === 'pass');
-
-            document.getElementById('recCount').textContent = filtered.length;
-
-            list.innerHTML = filtered.map(rec => `
-                <div class="recommendation-item">
-                    <div class="rec-status ${rec.status}">
-                        <i class="fas ${rec.status === 'pass' ? 'fa-check' : rec.status === 'fail' ? 'fa-times' : 'fa-exclamation'}"></i>
+            // Display metrics
+            const metricsGrid = document.getElementById('metricsGrid');
+            metricsGrid.innerHTML = Object.entries(results.metrics).map(([key, value]) => `
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">${key.charAt(0).toUpperCase() + key.slice(1)}</span>
+                        <span class="metric-status ${value >= 80 ? 'pass' : value >= 50 ? 'warn' : 'fail'}"></span>
                     </div>
-                    <div class="rec-content">
-                        <div class="rec-title">${rec.title}</div>
-                        <div class="rec-description">${rec.description}</div>
-                        <span class="rec-impact ${rec.impact}">${rec.impact.toUpperCase()} IMPACT ${rec.savings ? '• Saves ' + rec.savings : ''}</span>
+                    <div class="metric-value">${value}%</div>
+                </div>
+            `).join('');
+
+            // Display issues
+            const issuesList = document.getElementById('issuesList');
+            issuesList.innerHTML = results.checks.map(check => `
+                <div class="issue-item ${check.pass ? (check.warn ? 'warning' : 'pass') : ''}">
+                    <div class="issue-icon ${check.pass ? (check.warn ? 'warning' : 'pass') : 'fail'}">
+                        <i class="fas ${check.pass ? (check.warn ? 'fa-exclamation' : 'fa-check') : 'fa-times'}"></i>
                     </div>
-                    <div class="rec-action">
-                        <button class="expand-btn"><i class="fas fa-chevron-right"></i></button>
+                    <div class="issue-content">
+                        <h4>${check.name}</h4>
+                        <p>${check.detail}</p>
                     </div>
                 </div>
             `).join('');
+
+            document.getElementById('results').classList.add('active');
         }
 
-        function filterRecs(filter) {
-            document.querySelectorAll('.details-panel .tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            renderRecommendations(filter);
-        }
-
-        function renderHistoryChart() {
-            const ctx = document.getElementById('historyChart').getContext('2d');
-            const history = getHistory();
-
-            if (historyChart) historyChart.destroy();
-
-            historyChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: history.map(h => h.date),
-                    datasets: [{
-                        data: history.map(h => h.score),
-                        borderColor: '#8b5cf6',
-                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#8b5cf6',
-                        pointRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { display: false },
-                        y: { display: false, min: 0, max: 100 }
-                    }
-                }
-            });
-        }
-
-        function getHistory() {
-            const stored = localStorage.getItem('pulseHistory');
-            if (stored) return JSON.parse(stored);
-            return [
-                { date: 'Dec 14', score: 72 },
-                { date: 'Dec 15', score: 75 },
-                { date: 'Dec 16', score: 78 },
-                { date: 'Dec 17', score: 82 },
-                { date: 'Dec 18', score: 86 }
-            ];
-        }
-
-        function saveToHistory(score) {
-            const history = getHistory();
-            const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            history.push({ date: today, score });
-            if (history.length > 10) history.shift();
+        function saveToHistory(url, results) {
+            const history = JSON.parse(localStorage.getItem('pulseHistory') || '[]');
+            history.unshift({ url, score: results.score, timestamp: results.timestamp });
+            if (history.length > 20) history.pop();
             localStorage.setItem('pulseHistory', JSON.stringify(history));
         }
 
-        function selectCategory(id) {
-            document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            renderRecommendations('all');
+        function showHistory() {
+            const section = document.getElementById('historySection');
+            const history = JSON.parse(localStorage.getItem('pulseHistory') || '[]');
+
+            if (history.length === 0) {
+                document.getElementById('historyList').innerHTML = '<p style="color: var(--text-muted);">No scan history yet.</p>';
+            } else {
+                document.getElementById('historyList').innerHTML = history.map(h => `
+                    <div class="history-item" onclick="document.getElementById('urlInput').value='${h.url}'; analyzeWebsite();">
+                        <span>${new URL(h.url).hostname}</span>
+                        <span style="color: ${h.score >= 80 ? 'var(--success)' : h.score >= 50 ? 'var(--warning)' : 'var(--danger)'}">${h.score}%</span>
+                    </div>
+                `).join('');
+            }
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
         }
 
-        function switchView(view) {
-            document.querySelectorAll('.breakdown-card .tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
+        function exportReport() {
+            if (!currentResults) return;
+            const report = `
+WEBSITE HEALTH REPORT
+=====================
+URL: ${currentResults.url}
+Date: ${new Date(currentResults.timestamp).toLocaleString()}
+Overall Score: ${currentResults.score}%
+
+METRICS:
+${Object.entries(currentResults.metrics).map(([k, v]) => `- ${k}: ${v}%`).join('\n')}
+
+CHECKS:
+${currentResults.checks.map(c => `[${c.pass ? '✓' : '✗'}] ${c.name}: ${c.detail}`).join('\n')}
+            `.trim();
+
+            const blob = new Blob([report], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `health-report-${new URL(currentResults.url).hostname}.txt`;
+            a.click();
         }
 
-        function showExportModal() { document.getElementById('exportModal').classList.add('active'); }
-        function hideExportModal() { document.getElementById('exportModal').classList.remove('active'); }
+        function copyReport() {
+            if (!currentResults) return;
+            const report = `Website Health Score: ${currentResults.score}%\nURL: ${currentResults.url}\nAnalyzed: ${new Date(currentResults.timestamp).toLocaleString()}`;
+            navigator.clipboard.writeText(report);
+            alert('Report copied to clipboard!');
+        }
 
-        function exportPDF() { alert('Generating PDF report...'); hideExportModal(); }
-        function exportCSV() { alert('Downloading CSV...'); hideExportModal(); }
-        function copyLink() { navigator.clipboard.writeText(window.location.href); alert('Link copied!'); hideExportModal(); }
-        function showHistory() { alert('Showing scan history...'); }
+        function analyzeAnother() {
+            document.getElementById('urlInput').value = '';
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('urlInput').focus();
+        }
 
         // Enter key support
-        document.getElementById('storeUrl').addEventListener('keypress', e => { if (e.key === 'Enter') analyzeStore(); });
+        document.getElementById('urlInput').addEventListener('keypress', e => { if (e.key === 'Enter') analyzeWebsite(); });
     </script>
 </body>
 
