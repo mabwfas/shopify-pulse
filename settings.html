@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - ShopifyPulse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="utils.js"></script>
+</head>
+
+<body>
+    <div class="bg-gradient"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-logo"><i class="fas fa-heartbeat"></i><span>ShopifyPulse</span></div>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="index.html" class="nav-link"><i class="fas fa-search"></i> Analyze</a></li>
+            <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="fas fa-chart-line"></i>
+                    Dashboard</a></li>
+            <li class="nav-item"><a href="compare.html" class="nav-link"><i class="fas fa-code-compare"></i> Compare</a>
+            </li>
+            <li class="nav-item"><a href="reports.html" class="nav-link"><i class="fas fa-file-alt"></i> Reports</a>
+            </li>
+            <li class="nav-item"><a href="settings.html" class="nav-link active"><i class="fas fa-cog"></i> Settings</a>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Settings</h1>
+                <p class="page-subtitle">Configure your ShopifyPulse preferences</p>
+            </div>
+            <button class="btn btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i> Save Changes</button>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <h3 class="card-title"><i class="fas fa-key"></i> API Configuration</h3>
+                <p class="text-muted mb-2">Connect to Google PageSpeed Insights for accurate metrics</p>
+                <div class="form-group">
+                    <label class="form-label">PageSpeed API Key</label>
+                    <input type="password" class="form-input" id="apiKey" placeholder="Enter your API key">
+                    <p class="text-muted mt-1" style="font-size: 0.8rem;">Get your free API key from <a
+                            href="https://developers.google.com/speed/docs/insights/v5/get-started" target="_blank"
+                            style="color: var(--primary);">Google Cloud Console</a></p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Analysis Strategy</label>
+                    <select class="form-select" id="strategy">
+                        <option value="mobile">Mobile</option>
+                        <option value="desktop">Desktop</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><i class="fas fa-bell"></i> Notifications</h3>
+                <p class="text-muted mb-2">Get alerted about important score changes</p>
+                <div class="form-group">
+                    <label class="flex-between" style="cursor: pointer;">
+                        <span>Email Notifications</span>
+                        <input type="checkbox" id="emailNotifications"
+                            style="width: 20px; height: 20px; accent-color: var(--primary);">
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Notification Email</label>
+                    <input type="email" class="form-input" id="notificationEmail" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Alert Threshold</label>
+                    <select class="form-select" id="alertThreshold">
+                        <option value="50">Score drops below 50</option>
+                        <option value="60">Score drops below 60</option>
+                        <option value="70">Score drops below 70</option>
+                        <option value="80">Score drops below 80</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <h3 class="card-title"><i class="fas fa-palette"></i> Appearance</h3>
+                <div class="form-group">
+                    <label class="form-label">Theme</label>
+                    <select class="form-select" id="theme">
+                        <option value="dark">Dark (Default)</option>
+                        <option value="light">Light</option>
+                        <option value="system">System Preference</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Primary Color</label>
+                    <div class="flex gap-2">
+                        <input type="color" id="primaryColor" value="#8b5cf6"
+                            style="width: 50px; height: 40px; border: none; border-radius: 8px; cursor: pointer;">
+                        <input type="text" class="form-input" id="primaryColorText" value="#8b5cf6" style="flex: 1;">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="flex-between" style="cursor: pointer;">
+                        <span>Compact Mode</span>
+                        <input type="checkbox" id="compactMode"
+                            style="width: 20px; height: 20px; accent-color: var(--primary);">
+                    </label>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><i class="fas fa-clock"></i> Auto-Analysis</h3>
+                <p class="text-muted mb-2">Schedule automatic website checks</p>
+                <div class="form-group">
+                    <label class="flex-between" style="cursor: pointer;">
+                        <span>Enable Auto-Analysis</span>
+                        <input type="checkbox" id="autoAnalysis"
+                            style="width: 20px; height: 20px; accent-color: var(--primary);">
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Frequency</label>
+                    <select class="form-select" id="autoFrequency">
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Websites to Monitor</label>
+                    <textarea class="form-textarea" id="monitoredSites"
+                        placeholder="Enter URLs, one per line"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title"><i class="fas fa-database"></i> Data Management</h3>
+            <div class="grid-3">
+                <div>
+                    <h4 style="margin-bottom: 0.5rem;">Export Data</h4>
+                    <p class="text-muted mb-2" style="font-size: 0.85rem;">Download all your analysis history</p>
+                    <button class="btn btn-outline" onclick="exportData()"><i class="fas fa-download"></i> Export
+                        JSON</button>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 0.5rem;">Import Data</h4>
+                    <p class="text-muted mb-2" style="font-size: 0.85rem;">Restore data from a backup</p>
+                    <button class="btn btn-outline" onclick="importData()"><i class="fas fa-upload"></i> Import
+                        JSON</button>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 0.5rem;">Clear All Data</h4>
+                    <p class="text-muted mb-2" style="font-size: 0.85rem;">Remove all stored data</p>
+                    <button class="btn btn-danger" onclick="clearAllData()"><i class="fas fa-trash"></i> Clear
+                        Data</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title"><i class="fas fa-info-circle"></i> About</h3>
+            <div class="flex gap-2" style="flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 200px;">
+                    <p><strong>ShopifyPulse</strong> v2.0.0</p>
+                    <p class="text-muted mt-1">Website health analyzer for Shopify stores</p>
+                    <p class="mt-2">
+                        <a href="https://github.com/mabwfas/shopify-pulse" target="_blank"
+                            class="btn btn-sm btn-outline"><i class="fab fa-github"></i> GitHub</a>
+                        <a href="#" class="btn btn-sm btn-outline"><i class="fas fa-book"></i> Documentation</a>
+                    </p>
+                </div>
+                <div style="flex: 1; min-width: 200px;">
+                    <p class="text-muted">Storage Usage</p>
+                    <div style="margin-top: 0.5rem;">
+                        <div class="flex-between mb-1">
+                            <span id="storageUsed">0 KB</span>
+                            <span class="text-muted">/ 5 MB</span>
+                        </div>
+                        <div style="height: 8px; background: var(--border); border-radius: 4px; overflow: hidden;">
+                            <div id="storageBar"
+                                style="height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function loadSettings() {
+            const settings = PulseUtils.storage.get('settings', {});
+
+            document.getElementById('apiKey').value = settings.apiKey || '';
+            document.getElementById('strategy').value = settings.strategy || 'mobile';
+            document.getElementById('emailNotifications').checked = settings.emailNotifications || false;
+            document.getElementById('notificationEmail').value = settings.notificationEmail || '';
+            document.getElementById('alertThreshold').value = settings.alertThreshold || '50';
+            document.getElementById('theme').value = settings.theme || 'dark';
+            document.getElementById('primaryColor').value = settings.primaryColor || '#8b5cf6';
+            document.getElementById('primaryColorText').value = settings.primaryColor || '#8b5cf6';
+            document.getElementById('compactMode').checked = settings.compactMode || false;
+            document.getElementById('autoAnalysis').checked = settings.autoAnalysis || false;
+            document.getElementById('autoFrequency').value = settings.autoFrequency || 'weekly';
+            document.getElementById('monitoredSites').value = (settings.monitoredSites || []).join('\n');
+
+            updateStorageInfo();
+        }
+
+        function saveSettings() {
+            const settings = {
+                apiKey: document.getElementById('apiKey').value,
+                strategy: document.getElementById('strategy').value,
+                emailNotifications: document.getElementById('emailNotifications').checked,
+                notificationEmail: document.getElementById('notificationEmail').value,
+                alertThreshold: document.getElementById('alertThreshold').value,
+                theme: document.getElementById('theme').value,
+                primaryColor: document.getElementById('primaryColor').value,
+                compactMode: document.getElementById('compactMode').checked,
+                autoAnalysis: document.getElementById('autoAnalysis').checked,
+                autoFrequency: document.getElementById('autoFrequency').value,
+                monitoredSites: document.getElementById('monitoredSites').value.split('\n').filter(s => s.trim())
+            };
+
+            PulseUtils.storage.set('settings', settings);
+            PulseUtils.toast.success('Settings saved!');
+        }
+
+        function updateStorageInfo() {
+            let total = 0;
+            for (let key in localStorage) {
+                if (key.startsWith('pulse_')) {
+                    total += localStorage.getItem(key).length * 2; // UTF-16
+                }
+            }
+            const kb = (total / 1024).toFixed(1);
+            const percent = (total / (5 * 1024 * 1024) * 100).toFixed(1);
+
+            document.getElementById('storageUsed').textContent = kb + ' KB';
+            document.getElementById('storageBar').style.width = percent + '%';
+        }
+
+        function exportData() {
+            const data = {
+                settings: PulseUtils.storage.get('settings', {}),
+                history: PulseUtils.storage.get('history', []),
+                exportedAt: new Date().toISOString()
+            };
+            PulseUtils.export.json(data, 'shopify-pulse-backup.json');
+            PulseUtils.toast.success('Data exported!');
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = e => {
+                const reader = new FileReader();
+                reader.onload = event => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        if (data.settings) PulseUtils.storage.set('settings', data.settings);
+                        if (data.history) PulseUtils.storage.set('history', data.history);
+                        loadSettings();
+                        PulseUtils.toast.success('Data imported!');
+                    } catch {
+                        PulseUtils.toast.error('Invalid file format');
+                    }
+                };
+                reader.readAsText(e.target.files[0]);
+            };
+            input.click();
+        }
+
+        function clearAllData() {
+            if (!confirm('This will delete all your data. Are you sure?')) return;
+
+            Object.keys(localStorage).forEach(key => {
+                if (key.startsWith('pulse_')) localStorage.removeItem(key);
+            });
+
+            loadSettings();
+            PulseUtils.toast.success('All data cleared!');
+        }
+
+        // Color picker sync
+        document.getElementById('primaryColor').addEventListener('input', e => {
+            document.getElementById('primaryColorText').value = e.target.value;
+        });
+        document.getElementById('primaryColorText').addEventListener('input', e => {
+            if (/^#[0-9A-Fa-f]{6}$/.test(e.target.value)) {
+                document.getElementById('primaryColor').value = e.target.value;
+            }
+        });
+
+        loadSettings();
+    </script>
+</body>
+
+</html>

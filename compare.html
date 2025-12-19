@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare - ShopifyPulse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="utils.js"></script>
+    <script src="api.js"></script>
+    <style>
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .vs-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1rem;
+            border-radius: 50%;
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .score-circle.good {
+            background: rgba(16, 185, 129, 0.2);
+            border: 3px solid var(--success);
+        }
+
+        .score-circle.warning {
+            background: rgba(245, 158, 11, 0.2);
+            border: 3px solid var(--warning);
+        }
+
+        .score-circle.bad {
+            background: rgba(239, 68, 68, 0.2);
+            border: 3px solid var(--danger);
+        }
+
+        .score-circle .value {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
+        .diff-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .diff-value.positive {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .diff-value.negative {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        .diff-value.neutral {
+            background: var(--bg-card);
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-gradient"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-logo"><i class="fas fa-heartbeat"></i><span>ShopifyPulse</span></div>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="index.html" class="nav-link"><i class="fas fa-search"></i> Analyze</a></li>
+            <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="fas fa-chart-line"></i>
+                    Dashboard</a></li>
+            <li class="nav-item"><a href="compare.html" class="nav-link active"><i class="fas fa-code-compare"></i>
+                    Compare</a></li>
+            <li class="nav-item"><a href="reports.html" class="nav-link"><i class="fas fa-file-alt"></i> Reports</a>
+            </li>
+            <li class="nav-item"><a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Compare Sites</h1>
+                <p class="page-subtitle">Compare performance metrics between two websites</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="grid-2" style="gap: 2rem;">
+                <div class="form-group">
+                    <label class="form-label">Website 1</label>
+                    <input type="url" class="form-input" id="url1" placeholder="https://store1.myshopify.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Website 2</label>
+                    <input type="url" class="form-input" id="url2" placeholder="https://store2.myshopify.com">
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <button class="btn btn-primary btn-lg" onclick="compareWebsites()"><i class="fas fa-balance-scale"></i>
+                    Compare Now</button>
+            </div>
+        </div>
+
+        <div id="loading" style="display: none; text-align: center; padding: 3rem;">
+            <div
+                style="width: 50px; height: 50px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;">
+            </div>
+            <p class="text-muted mt-2">Analyzing websites...</p>
+            <style>
+                @keyframes spin {
+                    to {
+                        transform: rotate(360deg);
+                    }
+                }
+            </style>
+        </div>
+
+        <div id="results" style="display: none;">
+            <div class="compare-grid mb-3">
+                <div class="card" style="text-align: center;">
+                    <div id="circle1" class="score-circle good">
+                        <span class="value">0</span>
+                        <span class="text-muted" style="font-size: 0.8rem;">Overall</span>
+                    </div>
+                    <h3 id="site1Name">Site 1</h3>
+                </div>
+                <div class="flex-center"><span class="vs-badge">VS</span></div>
+                <div class="card" style="text-align: center;">
+                    <div id="circle2" class="score-circle good">
+                        <span class="value">0</span>
+                        <span class="text-muted" style="font-size: 0.8rem;">Overall</span>
+                    </div>
+                    <h3 id="site2Name">Site 2</h3>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><i class="fas fa-chart-bar"></i> Score Comparison</h3>
+                <div class="chart-container"><canvas id="comparisonChart"></canvas></div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><i class="fas fa-list"></i> Detailed Comparison</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th style="text-align: center;" id="th1">Site 1</th>
+                            <th style="text-align: center;" id="th2">Site 2</th>
+                            <th style="text-align: center;">Difference</th>
+                            <th style="text-align: center;">Winner</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comparisonTable"></tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><i class="fas fa-trophy"></i> Verdict</h3>
+                <div id="verdict" style="text-align: center; padding: 2rem;"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let comparisonChart;
+
+        async function compareWebsites() {
+            const url1 = document.getElementById('url1').value.trim();
+            const url2 = document.getElementById('url2').value.trim();
+
+            if (!url1 || !url2) {
+                PulseUtils.toast.error('Please enter both URLs');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+
+            try {
+                const [result1, result2] = await Promise.all([
+                    PulseAPI.analyzePageSpeed(url1),
+                    PulseAPI.analyzePageSpeed(url2)
+                ]);
+
+                displayComparison(result1, result2);
+            } catch (error) {
+                PulseUtils.toast.error('Error analyzing websites');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function displayComparison(r1, r2) {
+            const overall1 = Math.round((r1.scores.performance + r1.scores.accessibility + r1.scores.bestPractices + r1.scores.seo) / 4);
+            const overall2 = Math.round((r2.scores.performance + r2.scores.accessibility + r2.scores.bestPractices + r2.scores.seo) / 4);
+
+            // Update circles
+            document.querySelector('#circle1 .value').textContent = overall1;
+            document.querySelector('#circle2 .value').textContent = overall2;
+            document.getElementById('circle1').className = 'score-circle ' + (overall1 >= 70 ? 'good' : overall1 >= 50 ? 'warning' : 'bad');
+            document.getElementById('circle2').className = 'score-circle ' + (overall2 >= 70 ? 'good' : overall2 >= 50 ? 'warning' : 'bad');
+
+            const host1 = new URL(r1.url).hostname;
+            const host2 = new URL(r2.url).hostname;
+            document.getElementById('site1Name').textContent = host1;
+            document.getElementById('site2Name').textContent = host2;
+            document.getElementById('th1').textContent = host1;
+            document.getElementById('th2').textContent = host2;
+
+            // Chart
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            if (comparisonChart) comparisonChart.destroy();
+
+            comparisonChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Performance', 'Accessibility', 'Best Practices', 'SEO', 'Overall'],
+                    datasets: [
+                        { label: host1, data: [r1.scores.performance, r1.scores.accessibility, r1.scores.bestPractices, r1.scores.seo, overall1], backgroundColor: '#8b5cf6' },
+                        { label: host2, data: [r2.scores.performance, r2.scores.accessibility, r2.scores.bestPractices, r2.scores.seo, overall2], backgroundColor: '#06b6d4' }
+                    ]
+                },
+                options: {
+                    ...PulseUtils.chart.defaultOptions,
+                    scales: { ...PulseUtils.chart.defaultOptions.scales, y: { ...PulseUtils.chart.defaultOptions.scales.y, max: 100 } }
+                }
+            });
+
+            // Table
+            const metrics = [
+                { name: 'Performance', v1: r1.scores.performance, v2: r2.scores.performance },
+                { name: 'Accessibility', v1: r1.scores.accessibility, v2: r2.scores.accessibility },
+                { name: 'Best Practices', v1: r1.scores.bestPractices, v2: r2.scores.bestPractices },
+                { name: 'SEO', v1: r1.scores.seo, v2: r2.scores.seo },
+                { name: 'First Contentful Paint', v1: r1.metrics.fcp, v2: r2.metrics.fcp, isTime: true },
+                { name: 'Largest Contentful Paint', v1: r1.metrics.lcp, v2: r2.metrics.lcp, isTime: true },
+                { name: 'Overall Score', v1: overall1, v2: overall2, highlight: true }
+            ];
+
+            document.getElementById('comparisonTable').innerHTML = metrics.map(m => {
+                const diff = m.isTime ? 0 : m.v1 - m.v2;
+                const diffClass = diff > 0 ? 'positive' : diff < 0 ? 'negative' : 'neutral';
+                const winner = diff > 0 ? host1 : diff < 0 ? host2 : 'Tie';
+
+                return `
+                    <tr ${m.highlight ? 'style="background: rgba(139,92,246,0.1);"' : ''}>
+                        <td><strong>${m.name}</strong></td>
+                        <td style="text-align: center;"><span class="badge ${m.isTime ? '' : m.v1 >= 70 ? 'badge-success' : m.v1 >= 50 ? 'badge-warning' : 'badge-danger'}">${m.v1}</span></td>
+                        <td style="text-align: center;"><span class="badge ${m.isTime ? '' : m.v2 >= 70 ? 'badge-success' : m.v2 >= 50 ? 'badge-warning' : 'badge-danger'}">${m.v2}</span></td>
+                        <td style="text-align: center;"><span class="diff-value ${diffClass}">${diff > 0 ? '+' : ''}${m.isTime ? '-' : diff}</span></td>
+                        <td style="text-align: center;">${m.isTime ? '-' : winner}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Verdict
+            const winner = overall1 > overall2 ? host1 : overall2 > overall1 ? host2 : null;
+            const diff = Math.abs(overall1 - overall2);
+
+            document.getElementById('verdict').innerHTML = winner
+                ? `<div style="font-size: 1.5rem; margin-bottom: 1rem;">🏆 <strong>${winner}</strong> wins!</div><p class="text-muted">With a ${diff} point advantage (${Math.max(overall1, overall2)} vs ${Math.min(overall1, overall2)})</p>`
+                : `<div style="font-size: 1.5rem;">🤝 It's a tie!</div><p class="text-muted">Both sites scored ${overall1}</p>`;
+
+            document.getElementById('results').style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

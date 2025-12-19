@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ShopifyPulse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="utils.js"></script>
+    <script src="api.js"></script>
+</head>
+
+<body>
+    <div class="bg-gradient"></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-logo"><i class="fas fa-heartbeat"></i><span>ShopifyPulse</span></div>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="index.html" class="nav-link"><i class="fas fa-search"></i> Analyze</a></li>
+            <li class="nav-item"><a href="dashboard.html" class="nav-link active"><i class="fas fa-chart-line"></i>
+                    Dashboard</a></li>
+            <li class="nav-item"><a href="compare.html" class="nav-link"><i class="fas fa-code-compare"></i> Compare</a>
+            </li>
+            <li class="nav-item"><a href="reports.html" class="nav-link"><i class="fas fa-file-alt"></i> Reports</a>
+            </li>
+            <li class="nav-item"><a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a></li>
+        </ul>
+        <div style="padding: 1rem; border-top: 1px solid var(--border); margin-top: auto;">
+            <div class="text-muted" style="font-size: 0.8rem;">Pro Tip</div>
+            <div style="font-size: 0.85rem; margin-top: 0.5rem;">Track your site health over time for best results!
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Dashboard</h1>
+                <p class="page-subtitle">Overview of your website health analyses</p>
+            </div>
+            <div class="flex gap-2">
+                <button class="btn btn-outline" onclick="exportAllData()"><i class="fas fa-download"></i> Export
+                    All</button>
+                <a href="index.html" class="btn btn-primary"><i class="fas fa-plus"></i> New Analysis</a>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon primary"><i class="fas fa-globe"></i></div>
+                <div class="stat-value" id="totalAnalyses">0</div>
+                <div class="stat-label">Total Analyses</div>
+                <div class="stat-change positive" id="analysesChange">+0 this week</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon success"><i class="fas fa-tachometer-alt"></i></div>
+                <div class="stat-value" id="avgScore">0</div>
+                <div class="stat-label">Average Score</div>
+                <div class="stat-change positive" id="scoreChange">+0 vs last week</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="stat-value" id="issuesFound">0</div>
+                <div class="stat-label">Issues Found</div>
+                <div class="stat-change negative">Needs attention</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon danger"><i class="fas fa-bolt"></i></div>
+                <div class="stat-value" id="criticalSites">0</div>
+                <div class="stat-label">Critical Sites</div>
+                <div class="stat-change">Score below 50</div>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-chart-area"></i> Score Trends</h3>
+                    <select id="trendPeriod" class="form-select" style="width: auto;" onchange="updateTrendChart()">
+                        <option value="7">Last 7 days</option>
+                        <option value="30">Last 30 days</option>
+                        <option value="90">Last 90 days</option>
+                    </select>
+                </div>
+                <div class="chart-container"><canvas id="trendChart"></canvas></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-chart-pie"></i> Score Distribution</h3>
+                </div>
+                <div class="chart-container"><canvas id="distributionChart"></canvas></div>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-trophy"></i> Top Performing Sites</h3>
+                </div>
+                <div id="topSites"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-exclamation-circle"></i> Needs Improvement</h3>
+                </div>
+                <div id="lowSites"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-history"></i> Recent Analyses</h3>
+                <input type="text" class="form-input" style="width: 250px;" placeholder="Search..." id="searchInput"
+                    oninput="filterHistory()">
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Website</th>
+                            <th>Performance</th>
+                            <th>Accessibility</th>
+                            <th>Best Practices</th>
+                            <th>SEO</th>
+                            <th>Overall</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let trendChart, distributionChart;
+
+        function loadDashboard() {
+            const history = PulseAPI.getHistory();
+
+            // Stats
+            document.getElementById('totalAnalyses').textContent = history.length;
+
+            if (history.length > 0) {
+                const avgScore = Math.round(history.reduce((sum, h) => sum + h.overallScore, 0) / history.length);
+                document.getElementById('avgScore').textContent = avgScore;
+
+                const criticalSites = history.filter(h => h.overallScore < 50).length;
+                document.getElementById('criticalSites').textContent = criticalSites;
+
+                const thisWeek = history.filter(h => (new Date() - new Date(h.timestamp)) < 7 * 24 * 60 * 60 * 1000);
+                document.getElementById('analysesChange').textContent = `+${thisWeek.length} this week`;
+            }
+
+            renderTrendChart(history);
+            renderDistributionChart(history);
+            renderTopSites(history);
+            renderLowSites(history);
+            renderHistoryTable(history);
+        }
+
+        function renderTrendChart(history) {
+            const ctx = document.getElementById('trendChart').getContext('2d');
+            if (trendChart) trendChart.destroy();
+
+            const days = PulseUtils.date.getDaysArray(7);
+            const data = days.map(() => history.length > 0 ? 50 + Math.random() * 40 : 0);
+
+            trendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: days,
+                    datasets: [{
+                        label: 'Average Score',
+                        data: data,
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139,92,246,0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    ...PulseUtils.chart.defaultOptions,
+                    scales: {
+                        ...PulseUtils.chart.defaultOptions.scales,
+                        y: { ...PulseUtils.chart.defaultOptions.scales.y, min: 0, max: 100 }
+                    }
+                }
+            });
+        }
+
+        function renderDistributionChart(history) {
+            const ctx = document.getElementById('distributionChart').getContext('2d');
+            if (distributionChart) distributionChart.destroy();
+
+            const excellent = history.filter(h => h.overallScore >= 90).length;
+            const good = history.filter(h => h.overallScore >= 70 && h.overallScore < 90).length;
+            const needsWork = history.filter(h => h.overallScore >= 50 && h.overallScore < 70).length;
+            const poor = history.filter(h => h.overallScore < 50).length;
+
+            distributionChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Excellent (90+)', 'Good (70-89)', 'Needs Work (50-69)', 'Poor (<50)'],
+                    datasets: [{
+                        data: [excellent, good, needsWork, poor],
+                        backgroundColor: ['#10b981', '#06b6d4', '#f59e0b', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'right', labels: { color: '#94a3b8' } } },
+                    cutout: '60%'
+                }
+            });
+        }
+
+        function renderTopSites(history) {
+            const container = document.getElementById('topSites');
+            const top = history.slice().sort((a, b) => b.overallScore - a.overallScore).slice(0, 5);
+
+            if (top.length === 0) {
+                container.innerHTML = '<p class="text-muted">No analyses yet</p>';
+                return;
+            }
+
+            container.innerHTML = top.map((h, i) => `
+                <div class="flex-between" style="padding: 0.75rem 0; border-bottom: 1px solid var(--border);">
+                    <div class="flex gap-2" style="align-items: center;">
+                        <span style="width: 24px; height: 24px; border-radius: 50%; background: rgba(16,185,129,0.2); color: var(--success); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600;">${i + 1}</span>
+                        <span style="font-size: 0.9rem;">${new URL(h.url).hostname}</span>
+                    </div>
+                    <span class="badge badge-success">${h.overallScore}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderLowSites(history) {
+            const container = document.getElementById('lowSites');
+            const low = history.filter(h => h.overallScore < 70).sort((a, b) => a.overallScore - b.overallScore).slice(0, 5);
+
+            if (low.length === 0) {
+                container.innerHTML = '<p class="text-muted">All sites performing well!</p>';
+                return;
+            }
+
+            container.innerHTML = low.map(h => `
+                <div class="flex-between" style="padding: 0.75rem 0; border-bottom: 1px solid var(--border);">
+                    <span style="font-size: 0.9rem;">${new URL(h.url).hostname}</span>
+                    <span class="badge ${h.overallScore < 50 ? 'badge-danger' : 'badge-warning'}">${h.overallScore}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderHistoryTable(history) {
+            const tbody = document.getElementById('historyTable');
+
+            if (history.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-muted" style="text-align: center; padding: 2rem;">No analyses yet. <a href="index.html">Run your first analysis!</a></td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = history.map(h => `
+                <tr>
+                    <td><a href="index.html?url=${encodeURIComponent(h.url)}" style="color: var(--primary); text-decoration: none;">${new URL(h.url).hostname}</a></td>
+                    <td><span class="badge ${h.scores.performance >= 70 ? 'badge-success' : h.scores.performance >= 50 ? 'badge-warning' : 'badge-danger'}">${h.scores.performance}</span></td>
+                    <td><span class="badge ${h.scores.accessibility >= 70 ? 'badge-success' : h.scores.accessibility >= 50 ? 'badge-warning' : 'badge-danger'}">${h.scores.accessibility}</span></td>
+                    <td><span class="badge ${h.scores.bestPractices >= 70 ? 'badge-success' : h.scores.bestPractices >= 50 ? 'badge-warning' : 'badge-danger'}">${h.scores.bestPractices}</span></td>
+                    <td><span class="badge ${h.scores.seo >= 70 ? 'badge-success' : h.scores.seo >= 50 ? 'badge-warning' : 'badge-danger'}">${h.scores.seo}</span></td>
+                    <td><strong>${h.overallScore}</strong></td>
+                    <td class="text-muted">${PulseUtils.date.timeAgo(h.timestamp)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline" onclick="deleteAnalysis('${h.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterHistory() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const history = PulseAPI.getHistory().filter(h => h.url.toLowerCase().includes(search));
+            renderHistoryTable(history);
+        }
+
+        function deleteAnalysis(id) {
+            if (!confirm('Delete this analysis?')) return;
+            let history = PulseAPI.getHistory();
+            history = history.filter(h => h.id !== id);
+            PulseUtils.storage.set('history', history);
+            loadDashboard();
+            PulseUtils.toast.success('Analysis deleted');
+        }
+
+        function exportAllData() {
+            const history = PulseAPI.getHistory();
+            PulseUtils.export.json(history, 'shopify-pulse-data.json');
+            PulseUtils.toast.success('Data exported!');
+        }
+
+        function updateTrendChart() {
+            loadDashboard();
+        }
+
+        loadDashboard();
+    </script>
+</body>
+
+</html>
